@@ -33,7 +33,7 @@ public class Post {
     private Set<User> likes = new HashSet<>();
 
     @OneToMany(mappedBy = "post")
-    @JsonIgnore
+    @JsonIgnoreProperties({"user","post"})
     @Column(name = "user_comments")
     private Set<Comment> comments;
 }
