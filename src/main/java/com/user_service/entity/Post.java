@@ -19,12 +19,12 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "url")
+    @Column(name = "url", nullable = false)
     private String postUrl;
 
     @ManyToOne
     @JsonIgnoreProperties("posts")
-    @JoinColumn(name = "user_posts")
+    @JoinColumn(name = "user_posts", nullable = false)
     private User user;
 
     @ManyToMany
