@@ -15,7 +15,7 @@ public class PostController {
     @Autowired
     private IPostService postService;
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public ResponseEntity<Post> createPost(@RequestBody Post post) {
         Post createdPost = postService.createPost(post);
         return new ResponseEntity<>(createdPost, HttpStatus.OK);

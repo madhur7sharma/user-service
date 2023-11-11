@@ -58,6 +58,11 @@ public class User {
     @Column(name = "liked_posts")
     private Set<Post> likedPosts = new HashSet<>();
 
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    @Column(name = "user_comments")
+    private Set<Comment> comments;
+
     @Column(name = "datecreated")
     @CreationTimestamp
     private Date dateCreated;

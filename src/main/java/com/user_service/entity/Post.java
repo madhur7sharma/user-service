@@ -31,4 +31,9 @@ public class Post {
     @JsonIgnore
     @JoinTable(name = "likes", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> likes = new HashSet<>();
+
+    @OneToMany(mappedBy = "post")
+    @JsonIgnore
+    @Column(name = "user_comments")
+    private Set<Comment> comments;
 }
