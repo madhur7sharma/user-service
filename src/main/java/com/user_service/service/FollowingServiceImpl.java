@@ -7,6 +7,8 @@ import com.user_service.respository.user.IUserRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
+
 @Service
 public class FollowingServiceImpl implements IFollowingService {
 
@@ -20,13 +22,18 @@ public class FollowingServiceImpl implements IFollowingService {
     public void follow(Long userId, Long followingId) {
         User user = userRespository.findById(userId).get();
         User followingUser = userRespository.findById(followingId).get();
-//        if(followingUser.) {
-            Following following = new Following();
-            following.getFollower().add(user);
-
-            user.getFollowing().add(following);
-            userRespository.save(user);
-//        }
-
+        Following fol = new Following();
+        fol.setFrom(user);
+        fol.setTo(followingUser);
+        boolean isAlreadyFollowing = false;
+        Iterator<Following> namesIterator = user.getFollowing().iterator();
+        while(namesIterator.hasNext()) {
+            if(namesIterator.next().getTo().getId() == followingId) {
+                isAlreadyFollowing = true;
+            }
+        }
+        if(!isAlreadyFollowing) {
+            followingRepository.save(fol);
+        }
     }
 }

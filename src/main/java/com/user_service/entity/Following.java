@@ -3,19 +3,24 @@ package com.user_service.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.user_service.dto.FollowStates;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "following")
+@EqualsAndHashCode
+@ToString
 public class Following {
 
     @Id
@@ -25,9 +30,15 @@ public class Following {
     @Column(name = "follow_request", nullable = false)
     private FollowStates followRequest = FollowStates.NONE;
 
-    @ManyToMany
-    @JoinTable(name = "following_users", joinColumns = @JoinColumn(name = "following_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> follower = new HashSet<>();
+    @ManyToOne
+    @ToString.Exclude
+    @JoinColumn(name="from_user_fk")
+    private User from;
+
+    @ManyToOne
+    @ToString.Exclude
+    @JoinColumn(name="to_user_fk")
+    private User to;
 
     @Column(name = "datecreated")
     @CreationTimestamp

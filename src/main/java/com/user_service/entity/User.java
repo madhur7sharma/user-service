@@ -3,15 +3,13 @@ package com.user_service.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -64,8 +62,12 @@ public class User {
     @Column(name = "user_comments")
     private Set<Comment> comments;
 
-    @ManyToMany(mappedBy = "follower")
-    @JsonIgnore
+    @OneToMany(mappedBy="to")
+    @JsonIgnoreProperties({"from", "to"})
+    private Set<Following> followers = new HashSet<>();
+
+    @OneToMany(mappedBy="from")
+    @JsonIgnoreProperties({"from", "to"})
     private Set<Following> following = new HashSet<>();
 
     @Column(name = "datecreated")
