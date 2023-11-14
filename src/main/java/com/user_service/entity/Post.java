@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,4 +39,12 @@ public class Post {
     @JsonIgnoreProperties({"user","post"})
     @Column(name = "user_comments")
     private Set<Comment> comments;
+
+    @Column(name = "datecreated")
+    @CreationTimestamp
+    private Date dateCreated;
+
+    @Column(name = "lastupdated")
+    @UpdateTimestamp
+    private Date lastUpdated;
 }

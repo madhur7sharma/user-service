@@ -32,6 +32,9 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "is_private", nullable = false)
+    private boolean isPrivate = false;
+
     @Column(name = "firstname", nullable = false)
     private String firstName;
 
@@ -54,13 +57,16 @@ public class User {
 
     @ManyToMany(mappedBy = "likes")
     @JsonIgnore
-    @Column(name = "liked_posts")
     private Set<Post> likedPosts = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     @Column(name = "user_comments")
     private Set<Comment> comments;
+
+    @ManyToMany(mappedBy = "follower")
+    @JsonIgnore
+    private Set<Following> following = new HashSet<>();
 
     @Column(name = "datecreated")
     @CreationTimestamp
