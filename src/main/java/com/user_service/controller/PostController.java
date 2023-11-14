@@ -1,6 +1,8 @@
 package com.user_service.controller;
 
 import com.user_service.dto.LikeRequest;
+import com.user_service.dto.PostTO;
+import com.user_service.dto.converter.PostConverter;
 import com.user_service.entity.Post;
 import com.user_service.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +18,16 @@ public class PostController {
     private IPostService postService;
 
     @PostMapping("/")
-    public ResponseEntity<Post> createPost(@RequestBody Post post) {
+    public ResponseEntity<PostTO> createPost(@RequestBody Post post) {
         Post createdPost = postService.createPost(post);
-        return new ResponseEntity<>(createdPost, HttpStatus.OK);
+        return new ResponseEntity<>(PostConverter.INSTANCE.convertToPostTO(createdPost), HttpStatus.OK);
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<Post> getPostById(@PathVariable(value = "postId") Long postId) {
+    public ResponseEntity<PostTO> getPostById(@PathVariable(value = "postId") Long postId) {
         Post post = postService.getPostById(postId);
-        return new ResponseEntity<>(post, HttpStatus.OK);
+        PostTO postTO = PostConverter.INSTANCE.convertToPostTO(post);
+        return new ResponseEntity<>(postTO, HttpStatus.OK);
     }
 
     @PostMapping("/{postId}/like")
