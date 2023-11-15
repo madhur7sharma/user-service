@@ -22,8 +22,8 @@ public class UserServiceImpl implements IUserService {
     private JwtService jwt;
 
     @Override
-    public String generateToken(String email) {
-        return jwt.generateToken(email);
+    public String generateToken(User user) {
+        return jwt.generateToken(user);
     }
 
     @Override
@@ -32,15 +32,15 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean validateUser(User user) {
+    public User validateUser(User user) {
         User userByEmail = userRespository.findByEmail(user.getEmail());
         if(userByEmail != null) {
             if(passwordEncoder.matches(user.getPassword(), userByEmail.getPassword())) {
-                return true;
+                return userByEmail;
             }
-            return false;
+            return null;
         }
-        return false;
+        return null;
     }
 
 //    @Override

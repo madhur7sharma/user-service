@@ -32,8 +32,9 @@ public class UserController {
     @PostMapping("/token")
     public ResponseEntity<TokenResponse> getToken(@RequestBody User user) {
         TokenResponse response = new TokenResponse();
-        if(userService.validateUser(user)) {
-            response.setToken(userService.generateToken(user.getEmail()));
+        User validatedUser = userService.validateUser(user);
+        if(validatedUser != null) {
+            response.setToken(userService.generateToken(validatedUser));
             response.setMessage("User authenticated");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }

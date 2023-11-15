@@ -1,6 +1,8 @@
 package com.user_service.controller;
 
 import com.user_service.entity.Comment;
+import com.user_service.entity.Post;
+import com.user_service.entity.User;
 import com.user_service.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,14 +10,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user/post/comment")
+@RequestMapping("/user/{userId}/post/{postId}/comment")
 public class CommentController {
 
     @Autowired
     private ICommentService commentService;
 
     @PostMapping("/")
-    public ResponseEntity<Comment> addComment(@RequestBody Comment comment) {
+    public ResponseEntity<Comment> addComment(@PathVariable(value = "userId") Long userId, @PathVariable(value = "postId") Long postId, @RequestBody Comment comment) {
+        User user = new User();
+        user.setId(userId);
+
+        Post post = new Post();
+        post.setId(postId);
+
+        comment.setUser(user);
+        comment.setPost(post);
+
         Comment addComment = commentService.addComment(comment);
         return new ResponseEntity<>(addComment, HttpStatus.OK);
     }
