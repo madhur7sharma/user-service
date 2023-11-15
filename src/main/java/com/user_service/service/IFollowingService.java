@@ -1,6 +1,8 @@
 package com.user_service.service;
 
 
+import com.user_service.dto.FollowRequest;
+
 public interface IFollowingService {
-    void follow(Long userId, Long followingId);
+    void updateFollowAction(Long userId, FollowRequest followRequest);
 }

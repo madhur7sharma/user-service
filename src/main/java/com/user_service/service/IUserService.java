@@ -9,4 +9,6 @@ public interface IUserService {
     String generateToken(String email);
 //    boolean validateToken(String token);
     List<User> getAllUsers();
+
+    boolean validateUser(User user);
 }

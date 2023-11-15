@@ -1,8 +1,7 @@
 package com.user_service.controller;
 
 import com.user_service.dto.FollowRequest;
-import com.user_service.dto.UserTO;
-import com.user_service.entity.Following;
+import com.user_service.dto.TokenResponse;
 import com.user_service.entity.User;
 import com.user_service.service.IFollowingService;
 import com.user_service.service.IUserService;
@@ -31,8 +30,15 @@ public class UserController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<String> getToken(@RequestBody User user) {
-        return new ResponseEntity<>(userService.generateToken(user.getEmail()), HttpStatus.OK);
+    public ResponseEntity<TokenResponse> getToken(@RequestBody User user) {
+        TokenResponse response = new TokenResponse();
+        if(userService.validateUser(user)) {
+            response.setToken(userService.generateToken(user.getEmail()));
+            response.setMessage("User authenticated");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        response.setMessage("Invalid credentials");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
@@ -48,7 +54,7 @@ public class UserController {
 
     @PostMapping("/{userId}/follow")
     public ResponseEntity<String> follow(@PathVariable("userId") Long userId, @RequestBody FollowRequest followRequest) {
-        followingService.follow(userId, followRequest.getFollowingId());
+        followingService.updateFollowAction(userId, followRequest);
         return new ResponseEntity<>("OKK", HttpStatus.OK);
     }
 

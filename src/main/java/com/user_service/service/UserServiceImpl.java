@@ -31,6 +31,18 @@ public class UserServiceImpl implements IUserService {
         return userRespository.findAll();
     }
 
+    @Override
+    public boolean validateUser(User user) {
+        User userByEmail = userRespository.findByEmail(user.getEmail());
+        if(userByEmail != null) {
+            if(passwordEncoder.matches(user.getPassword(), userByEmail.getPassword())) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
 //    @Override
 //    public boolean validateToken(String token) {
 //        jwt.validateToken(token);

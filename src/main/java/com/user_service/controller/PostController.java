@@ -4,6 +4,7 @@ import com.user_service.dto.LikeRequest;
 import com.user_service.dto.PostTO;
 import com.user_service.dto.converter.PostConverter;
 import com.user_service.entity.Post;
+import com.user_service.entity.User;
 import com.user_service.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,14 +12,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user/post")
+@RequestMapping("/user/{userId}/post")
 public class PostController {
 
     @Autowired
     private IPostService postService;
 
     @PostMapping("/")
-    public ResponseEntity<PostTO> createPost(@RequestBody Post post) {
+    public ResponseEntity<PostTO> createPost(@PathVariable(value = "userId") Long userId, @RequestBody Post post) {
+        User user = new User();
+        user.setId(userId);
+        post.setUser(user);
         Post createdPost = postService.createPost(post);
         return new ResponseEntity<>(PostConverter.INSTANCE.convertToPostTO(createdPost), HttpStatus.OK);
     }
