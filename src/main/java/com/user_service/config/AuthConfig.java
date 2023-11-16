@@ -48,6 +48,8 @@ public class AuthConfig {
                         authorizeRequests
                                 .requestMatchers("/user/{userId}/token", "/user/{userId}/register")
                                 .permitAll()
+                                .requestMatchers("/user/{userId}/hey", "/user/{userId}/all")
+                                .hasAuthority("ADMIN")
                                 .anyRequest()
                                 .authenticated())
                 .csrf(AbstractHttpConfigurer::disable);
