@@ -6,13 +6,16 @@ import com.user_service.dto.converter.PostConverter;
 import com.user_service.entity.Post;
 import com.user_service.entity.User;
 import com.user_service.service.IPostService;
+import com.user_service.utilities.UserServiceConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/user/{userId}/post")
+@RequestMapping(UserServiceConstants.USER_BASE_ROUTE + "/post")
 public class PostController {
 
     @Autowired
@@ -34,8 +37,16 @@ public class PostController {
         return new ResponseEntity<>(postTO, HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<PostTO>> getAllPostsOfUser(@PathVariable(value = "userId") Long userId) {
+        List<Post> postByUserId = postService.findPostByUserId(userId);
+        List<PostTO> postTOS = PostConverter.INSTANCE.convertToPostTO(postByUserId);
+        return new ResponseEntity<>(postTOS, HttpStatus.OK);
+    }
+
     @PostMapping("/{postId}/like")
-    public ResponseEntity<LikeRequest> likePost(@PathVariable(value = "postId") Long postId, @RequestBody LikeRequest likeRequest) {
+    public ResponseEntity<LikeRequest> likePost(@PathVariable(value = "userId") Long userId, @PathVariable(value = "postId") Long postId, @RequestBody LikeRequest likeRequest) {
+        likeRequest.setUserId(userId);
         postService.likePost(postId, likeRequest.getUserId(), likeRequest.getAction());
         return new ResponseEntity<>(likeRequest, HttpStatus.OK);
     }

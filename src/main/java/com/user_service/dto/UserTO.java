@@ -5,20 +5,22 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.user_service.entity.Comment;
 import com.user_service.entity.Following;
 import com.user_service.entity.Post;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
 public class UserTO {
     private Long id;
 
     private String userName;
 
     private String email;
-
-    private String password;
 
     private boolean isPrivate = false;
 
@@ -32,17 +34,11 @@ public class UserTO {
 
     private String roles;
 
-    @JsonIgnoreProperties("user")
-    private List<Post> posts;
+    private int noOfPosts = 0;
 
-    @JsonIgnore
-    private Set<Post> likedPosts = new HashSet<>();
+    private int noOfFollowing = 0;
 
-    @JsonIgnore
-    private Set<Comment> comments;
-
-    @JsonIgnore
-    private Set<Following> following = new HashSet<>();
+    private int noOfFollowers = 0;
 
     private Date dateCreated;
 

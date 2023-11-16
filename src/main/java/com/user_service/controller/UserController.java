@@ -2,9 +2,12 @@ package com.user_service.controller;
 
 import com.user_service.dto.FollowRequest;
 import com.user_service.dto.TokenResponse;
+import com.user_service.dto.UserTO;
+import com.user_service.dto.converter.IUserConverter;
 import com.user_service.entity.User;
 import com.user_service.service.IFollowingService;
 import com.user_service.service.IUserService;
+import com.user_service.utilities.UserServiceConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping(UserServiceConstants.USER_BASE_ROUTE)
 public class UserController {
 
     @Autowired
@@ -43,17 +46,17 @@ public class UserController {
     }
 
 
-    @GetMapping("/hey/{userId}")
+    @GetMapping("/hey")
     public String getUser(@PathVariable("userId") Long userId) {
         return "user";
     }
 
     @GetMapping("/all")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public List<UserTO> getAllUsers() {
+        return IUserConverter.INSTANCE.convertToUserTO(userService.getAllUsers());
     }
 
-    @PostMapping("/{userId}/follow")
+    @PostMapping("/follow")
     public ResponseEntity<String> follow(@PathVariable("userId") Long userId, @RequestBody FollowRequest followRequest) {
         followingService.updateFollowAction(userId, followRequest);
         return new ResponseEntity<>("OKK", HttpStatus.OK);

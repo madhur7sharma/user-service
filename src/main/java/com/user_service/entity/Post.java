@@ -1,7 +1,5 @@
 package com.user_service.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,17 +24,14 @@ public class Post {
     private String postUrl;
 
     @ManyToOne
-    @JsonIgnoreProperties("posts")
     @JoinColumn(name = "user_posts", nullable = false)
     private User user;
 
     @ManyToMany
-    @JsonIgnore
     @JoinTable(name = "likes", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> likes = new HashSet<>();
 
     @OneToMany(mappedBy = "post")
-    @JsonIgnoreProperties({"user","post"})
     @Column(name = "user_comments")
     private Set<Comment> comments;
 

@@ -1,5 +1,6 @@
 package com.user_service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.user_service.entity.Comment;
 import com.user_service.entity.User;
@@ -18,11 +19,19 @@ public class PostTO {
     private String postUrl;
 
     @JsonIgnoreProperties("posts")
+    @JsonIgnore
     private User user;
 
+    @JsonIgnoreProperties({"posts", "likedPosts", "comments", "followers", "following"})
+    @JsonIgnore
     private Set<User> likes = new HashSet<>();
 
-    @JsonIgnoreProperties({"user","post"})
+    private int noOfLikes = 0;
+
+    @JsonIgnoreProperties({"user", "post"})
+    @JsonIgnore
     private Set<Comment> comments;
+
+    private int noOfComments = 0;
 
 }

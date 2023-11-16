@@ -8,6 +8,7 @@ import com.user_service.respository.user.IUserRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,5 +47,10 @@ public class PostServiceImpl implements IPostService {
                 postRepository.save(post);
             }
         }
+    }
+
+    @Override
+    public List<Post> findPostByUserId(Long userId) {
+        return postRepository.findPostByUserId(userId);
     }
 }

@@ -4,19 +4,20 @@ import com.user_service.entity.Comment;
 import com.user_service.entity.Post;
 import com.user_service.entity.User;
 import com.user_service.service.ICommentService;
+import com.user_service.utilities.UserServiceConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user/{userId}/post/{postId}/comment")
+@RequestMapping(UserServiceConstants.USER_BASE_ROUTE + "/post/{postId}/")
 public class CommentController {
 
     @Autowired
     private ICommentService commentService;
 
-    @PostMapping("/")
+    @PostMapping("/comment")
     public ResponseEntity<Comment> addComment(@PathVariable(value = "userId") Long userId, @PathVariable(value = "postId") Long postId, @RequestBody Comment comment) {
         User user = new User();
         user.setId(userId);

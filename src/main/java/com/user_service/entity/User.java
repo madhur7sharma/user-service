@@ -1,9 +1,6 @@
 package com.user_service.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -49,25 +46,20 @@ public class User {
     private String roles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("user")
     @Column(name = "posts")
     private List<Post> posts;
 
     @ManyToMany(mappedBy = "likes")
-    @JsonIgnore
     private Set<Post> likedPosts = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
-    @JsonIgnore
     @Column(name = "user_comments")
     private Set<Comment> comments;
 
     @OneToMany(mappedBy="to")
-    @JsonIgnoreProperties({"from", "to"})
     private Set<Following> followers = new HashSet<>();
 
     @OneToMany(mappedBy="from")
-    @JsonIgnoreProperties({"from", "to"})
     private Set<Following> following = new HashSet<>();
 
     @Column(name = "datecreated")
