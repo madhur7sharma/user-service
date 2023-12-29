@@ -7,7 +7,9 @@ import com.user_service.dto.converter.IUserConverter;
 import com.user_service.entity.User;
 import com.user_service.service.IFollowingService;
 import com.user_service.service.IUserService;
+import com.user_service.service.JwtService;
 import com.user_service.utilities.UserServiceConstants;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +28,9 @@ public class UserController {
 
     @Autowired
     private IFollowingService followingService;
+
+    @Autowired
+    private JwtService jwt;
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
@@ -48,9 +53,18 @@ public class UserController {
     }
 
 
-    @GetMapping("/hey")
-    public String getUser(@PathVariable("userId") Long userId) {
-        return "user";
+    @GetMapping("/get-loggedin-user")
+    public ResponseEntity<?> getUser(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if(token == null) {
+            token = request.getParameter("Authorization");
+        }
+        token = token.substring(7);
+        if(!jwt.isTokenExpired(token)) {
+            User user = userService.findByEmail(jwt.extractEmail(token));
+            return new ResponseEntity<UserTO>(IUserConverter.INSTANCE.convertToUserTO(user), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Unauthenticated", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/all")

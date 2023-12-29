@@ -26,7 +26,7 @@ public class JwtService {
         return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    private boolean isTokenExpired(String token) {
+    public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
@@ -42,7 +42,7 @@ public class JwtService {
                 .setSubject(user.getEmail())
                 .claim("userId", user.getId())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 300))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();
     }
 
