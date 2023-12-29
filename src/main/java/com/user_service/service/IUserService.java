@@ -11,4 +11,6 @@ public interface IUserService {
     List<User> getAllUsers();
 
     User validateUser(User user);
+
+    User findByEmail(String email);
 }

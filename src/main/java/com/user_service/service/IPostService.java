@@ -13,4 +13,6 @@ public interface IPostService {
     void likePost(Long postId, Long userId, LikeStates action);
 
     List<Post> findPostByUserId(Long userId);
+
+    List<Post> findPostByUserName(String userName);
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(UserServiceConstants.USER_BASE_ROUTE + "/post/{postId}/")
+@CrossOrigin("http://localhost:4200")
 public class CommentController {
 
     @Autowired

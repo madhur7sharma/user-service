@@ -43,6 +43,11 @@ public class UserServiceImpl implements IUserService {
         return null;
     }
 
+    @Override
+    public User findByEmail(String email) {
+        return userRespository.findByEmail(email);
+    }
+
 //    @Override
 //    public boolean validateToken(String token) {
 //        jwt.validateToken(token);

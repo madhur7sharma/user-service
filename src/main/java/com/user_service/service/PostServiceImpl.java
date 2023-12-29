@@ -53,4 +53,9 @@ public class PostServiceImpl implements IPostService {
     public List<Post> findPostByUserId(Long userId) {
         return postRepository.findPostByUserId(userId);
     }
+
+    @Override
+    public List<Post> findPostByUserName(String userName) {
+        return postRepository.findPostByUserUserName(userName);
+    }
 }

@@ -18,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(UserServiceConstants.USER_BASE_ROUTE)
+@CrossOrigin("http://localhost:4200")
 public class UserController {
 
     @Autowired
@@ -38,6 +39,7 @@ public class UserController {
         User validatedUser = userService.validateUser(user);
         if(validatedUser != null) {
             response.setToken(userService.generateToken(validatedUser));
+            response.setUser(IUserConverter.INSTANCE.convertToUserTO(validatedUser));
             response.setMessage("User authenticated");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }

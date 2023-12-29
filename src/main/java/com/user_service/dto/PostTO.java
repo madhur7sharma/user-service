@@ -18,8 +18,7 @@ public class PostTO {
 
     private String postUrl;
 
-    @JsonIgnoreProperties("posts")
-    @JsonIgnore
+    @JsonIgnoreProperties({"posts","likedPosts", "comments", "followers", "following"})
     private User user;
 
     @JsonIgnoreProperties({"posts", "likedPosts", "comments", "followers", "following"})

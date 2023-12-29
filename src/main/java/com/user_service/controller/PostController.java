@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(UserServiceConstants.USER_BASE_ROUTE + "/post")
+@CrossOrigin("http://localhost:4200")
 public class PostController {
 
     @Autowired
@@ -40,6 +41,13 @@ public class PostController {
     @GetMapping("/all")
     public ResponseEntity<List<PostTO>> getAllPostsOfUser(@PathVariable(value = "userId") Long userId) {
         List<Post> postByUserId = postService.findPostByUserId(userId);
+        List<PostTO> postTOS = PostConverter.INSTANCE.convertToPostTO(postByUserId);
+        return new ResponseEntity<>(postTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("/all/{username}")
+    public ResponseEntity<List<PostTO>> getAllPostsOfUserName(@PathVariable(value = "username") String userName) {
+        List<Post> postByUserId = postService.findPostByUserName(userName);
         List<PostTO> postTOS = PostConverter.INSTANCE.convertToPostTO(postByUserId);
         return new ResponseEntity<>(postTOS, HttpStatus.OK);
     }

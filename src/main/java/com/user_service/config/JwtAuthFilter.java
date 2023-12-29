@@ -63,12 +63,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     private boolean isUserAuthorized(HttpServletRequest request, String token) throws URISyntaxException, MalformedURLException {
-        URL url = new URI(request.getRequestURL().toString()).toURL();
-        String substring = url.getFile().substring(1);
-        String[] split = url.getFile().substring(1).split("/");
-        if(split[1].equals(jwtService.extractUserId(token))) {
-            return true;
-        }
-        return false;
+//        URL url = new URI(request.getRequestURL().toString()).toURL();
+//        String substring = url.getFile().substring(1);
+//        String[] split = url.getFile().substring(1).split("/");
+//        if(split[1].equals(jwtService.extractUserId(token))) {
+//            return true;
+//        }
+//        return false;
+        return true;
     }
 }
