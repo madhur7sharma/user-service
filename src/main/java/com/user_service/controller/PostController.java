@@ -28,27 +28,27 @@ public class PostController {
         user.setId(userId);
         post.setUser(user);
         Post createdPost = postService.createPost(post);
-        return new ResponseEntity<>(PostConverter.INSTANCE.convertToPostTO(createdPost), HttpStatus.OK);
+        return new ResponseEntity<>(PostConverter.INSTANCE.convertToPostTO(createdPost, userId), HttpStatus.OK);
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostTO> getPostById(@PathVariable(value = "postId") Long postId) {
+    public ResponseEntity<PostTO> getPostById(@PathVariable(value = "userId") Long userId, @PathVariable(value = "postId") Long postId) {
         Post post = postService.getPostById(postId);
-        PostTO postTO = PostConverter.INSTANCE.convertToPostTO(post);
+        PostTO postTO = PostConverter.INSTANCE.convertToPostTO(post, userId);
         return new ResponseEntity<>(postTO, HttpStatus.OK);
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<PostTO>> getAllPostsOfUser(@PathVariable(value = "userId") Long userId) {
         List<Post> postByUserId = postService.findPostByUserId(userId);
-        List<PostTO> postTOS = PostConverter.INSTANCE.convertToPostTO(postByUserId);
+        List<PostTO> postTOS = PostConverter.INSTANCE.convertToPostTO(postByUserId, userId);
         return new ResponseEntity<>(postTOS, HttpStatus.OK);
     }
 
     @GetMapping("/all/{username}")
-    public ResponseEntity<List<PostTO>> getAllPostsOfUserName(@PathVariable(value = "username") String userName) {
+    public ResponseEntity<List<PostTO>> getAllPostsOfUserName(@PathVariable(value = "userId") Long userId, @PathVariable(value = "username") String userName) {
         List<Post> postByUserId = postService.findPostByUserName(userName);
-        List<PostTO> postTOS = PostConverter.INSTANCE.convertToPostTO(postByUserId);
+        List<PostTO> postTOS = PostConverter.INSTANCE.convertToPostTO(postByUserId, userId);
         return new ResponseEntity<>(postTOS, HttpStatus.OK);
     }
 

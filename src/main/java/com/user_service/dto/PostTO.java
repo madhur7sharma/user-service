@@ -33,4 +33,6 @@ public class PostTO {
 
     private int noOfComments = 0;
 
+    private boolean isLikedByUser = false;
+
 }
