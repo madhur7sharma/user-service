@@ -12,5 +12,9 @@ public interface IUserService {
 
     User validateUser(User user);
 
+    User findById(Long id);
+
     User findByEmail(String email);
+
+    User findByUserName(String userName);
 }

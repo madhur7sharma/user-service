@@ -1,9 +1,12 @@
 package com.user_service.controller;
 
 import com.user_service.dto.FollowRequest;
+import com.user_service.dto.FollowingTO;
 import com.user_service.dto.TokenResponse;
 import com.user_service.dto.UserTO;
+import com.user_service.dto.converter.IFollowingConverter;
 import com.user_service.dto.converter.IUserConverter;
+import com.user_service.entity.Following;
 import com.user_service.entity.User;
 import com.user_service.service.IFollowingService;
 import com.user_service.service.IUserService;
@@ -16,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -76,6 +80,18 @@ public class UserController {
     public ResponseEntity<String> follow(@PathVariable("userId") Long userId, @RequestBody FollowRequest followRequest) {
         followingService.updateFollowAction(userId, followRequest);
         return new ResponseEntity<>("OKK", HttpStatus.OK);
+    }
+
+    @GetMapping("/followers/{username}")
+    public ResponseEntity<Set<FollowingTO>> getFollowersByUserName(@PathVariable("userId") Long userId, @PathVariable("username") String username) {
+        User loggedInUser = userService.findById(userId);
+        return new ResponseEntity<>(IFollowingConverter.INSTANCE.convertToFollowingTO(userService.findByUserName(username).getFollowers(), "followers", loggedInUser.getFollowing()), HttpStatus.OK);
+    }
+
+    @GetMapping("/following/{username}")
+    public ResponseEntity<Set<FollowingTO>> getFollowingByUserName(@PathVariable("userId") Long userId, @PathVariable("username") String username) {
+        User loggedInUser = userService.findById(userId);
+        return new ResponseEntity<>(IFollowingConverter.INSTANCE.convertToFollowingTO(userService.findByUserName(username).getFollowing(), "following", loggedInUser.getFollowing()), HttpStatus.OK);
     }
 
 }

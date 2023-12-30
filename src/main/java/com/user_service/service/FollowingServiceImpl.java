@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
+import java.util.List;
 
 @Service
 public class FollowingServiceImpl implements IFollowingService {
@@ -44,5 +45,10 @@ public class FollowingServiceImpl implements IFollowingService {
             }
         }
         // TODO refine this implementation\
+    }
+
+    @Override
+    public List<Following> findFollowersByUserName(String userName) {
+        return followingRepository.findFollowingByFromUserName(userName);
     }
 }

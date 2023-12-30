@@ -1,6 +1,7 @@
 package com.user_service.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.user_service.dto.FollowStates;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

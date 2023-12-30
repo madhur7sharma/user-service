@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.List;
+
 @Repository
 @CrossOrigin("http://localhost:4200")
 public interface IFollowingRepository extends JpaRepository<Following, Long> {
@@ -17,4 +19,6 @@ public interface IFollowingRepository extends JpaRepository<Following, Long> {
     @Query("DELETE FROM Following WHERE from.id =:userId AND to.id =:followingId")
     @Transactional
     public void unFollowUser(@Param("userId") Long userId, @Param("followingId") Long followingId);
+
+    List<Following> findFollowingByFromUserName(@Param("userName") String userName);
 }
