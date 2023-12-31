@@ -4,9 +4,9 @@ import com.user_service.dto.FollowRequest;
 import com.user_service.dto.FollowingTO;
 import com.user_service.dto.TokenResponse;
 import com.user_service.dto.UserTO;
+import com.user_service.dto.Response;
 import com.user_service.dto.converter.IFollowingConverter;
 import com.user_service.dto.converter.IUserConverter;
-import com.user_service.entity.Following;
 import com.user_service.entity.User;
 import com.user_service.service.IFollowingService;
 import com.user_service.service.IUserService;
@@ -77,9 +77,9 @@ public class UserController {
     }
 
     @PostMapping("/follow")
-    public ResponseEntity<String> follow(@PathVariable("userId") Long userId, @RequestBody FollowRequest followRequest) {
+    public ResponseEntity<Response> follow(@PathVariable("userId") Long userId, @RequestBody FollowRequest followRequest) {
         followingService.updateFollowAction(userId, followRequest);
-        return new ResponseEntity<>("OKK", HttpStatus.OK);
+        return new ResponseEntity<>(new Response("Success"), HttpStatus.OK);
     }
 
     @GetMapping("/followers/{username}")

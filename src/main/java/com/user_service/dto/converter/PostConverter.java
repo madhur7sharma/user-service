@@ -11,6 +11,7 @@ import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -45,9 +46,13 @@ public interface PostConverter {
     }
 
     default List<PostTO> convertToPostTO(Collection<Post> posts, Long currentUserId) {
-        return posts.stream().map(post -> {
-            PostTO postTO = this.convertToPostTO(post, currentUserId);
-            return postTO;
-        }).collect(Collectors.toList());
+        if(posts != null) {
+            return posts.stream().map(post -> {
+                PostTO postTO = this.convertToPostTO(post, currentUserId);
+                return postTO;
+            }).collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

@@ -18,7 +18,7 @@ public interface IFollowingRepository extends JpaRepository<Following, Long> {
     @Modifying
     @Query("DELETE FROM Following WHERE from.id =:userId AND to.id =:followingId")
     @Transactional
-    public void unFollowUser(@Param("userId") Long userId, @Param("followingId") Long followingId);
+    void unFollowUser(@Param("userId") Long userId, @Param("followingId") Long followingId);
 
     List<Following> findFollowingByFromUserName(@Param("userName") String userName);
 }
