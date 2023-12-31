@@ -17,4 +17,6 @@ public interface IUserService {
     User findByEmail(String email);
 
     User findByUserName(String userName);
+
+    List<User> findByNameContaining(String name);
 }

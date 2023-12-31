@@ -32,7 +32,10 @@ public interface PostConverter {
 
     @Named("noOfComments")
     public static int noOfComments(Set<Comment> comments) {
-        return comments.size();
+        if(comments != null) {
+            return comments.size();
+        }
+        return 0;
     }
 
     @Named("likedByUser")

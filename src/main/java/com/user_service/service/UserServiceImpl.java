@@ -58,6 +58,11 @@ public class UserServiceImpl implements IUserService {
         return userRespository.findByUserName(userName);
     }
 
+    @Override
+    public List<User> findByNameContaining(String name) {
+        return userRespository.findByFirstNameContainingAllIgnoreCase(name);
+    }
+
 //    @Override
 //    public boolean validateToken(String token) {
 //        jwt.validateToken(token);

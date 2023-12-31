@@ -4,6 +4,7 @@ import com.user_service.dto.UserTO;
 import com.user_service.entity.Following;
 import com.user_service.entity.Post;
 import com.user_service.entity.User;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -22,7 +23,8 @@ public interface IUserConverter {
     @Mapping(source = "posts", target = "noOfPosts", qualifiedByName = "noOfPosts")
     @Mapping(source = "followers", target = "noOfFollowers", qualifiedByName = "noOfFollowers")
     @Mapping(source = "following", target = "noOfFollowing", qualifiedByName = "noOfFollowing")
-    UserTO convertToUserTO(User user);
+    @Mapping(source = "user", target = "userFollowedByLoggedInUser", qualifiedByName = "isUserFollowedByLoggedInUser")
+    UserTO convertToUserTO(User user, @Context Long loggedInUserId);
 
     @Named("noOfPosts")
     default int postNumbers(List<Post> posts) {
@@ -39,9 +41,14 @@ public interface IUserConverter {
         return followings.size();
     }
 
-    default List<UserTO> convertToUserTO(Collection<User> users) {
+    @Named("isUserFollowedByLoggedInUser")
+    default boolean isUserFollowedByLoggedInUser(User user, @Context Long loggedInUserId) {
+        return user.getFollowers().stream().anyMatch(user1 -> user1.getFrom().getId().equals(loggedInUserId));
+    }
+
+    default List<UserTO> convertToUserTO(Collection<User> users, Long loggedInUserId) {
         return users.stream().map(user -> {
-            UserTO userTO = this.convertToUserTO(user);
+            UserTO userTO = this.convertToUserTO(user, loggedInUserId);
             return userTO;
         }).collect(Collectors.toList());
     }

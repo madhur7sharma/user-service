@@ -43,12 +43,12 @@ public class UserController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<TokenResponse> getToken(@RequestBody User user) {
+    public ResponseEntity<TokenResponse> getToken(@PathVariable("userId") Long userId, @RequestBody User user) {
         TokenResponse response = new TokenResponse();
         User validatedUser = userService.validateUser(user);
         if(validatedUser != null) {
             response.setToken(userService.generateToken(validatedUser));
-            response.setUser(IUserConverter.INSTANCE.convertToUserTO(validatedUser));
+            response.setUser(IUserConverter.INSTANCE.convertToUserTO(validatedUser, userId));
             response.setMessage("User authenticated");
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
@@ -58,7 +58,7 @@ public class UserController {
 
 
     @GetMapping("/get-loggedin-user")
-    public ResponseEntity<?> getUser(HttpServletRequest request) {
+    public ResponseEntity<?> getUser(@PathVariable("userId") Long userId, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if(token == null) {
             token = request.getParameter("Authorization");
@@ -66,14 +66,14 @@ public class UserController {
         token = token.substring(7);
         if(!jwt.isTokenExpired(token)) {
             User user = userService.findByEmail(jwt.extractEmail(token));
-            return new ResponseEntity<UserTO>(IUserConverter.INSTANCE.convertToUserTO(user), HttpStatus.OK);
+            return new ResponseEntity<UserTO>(IUserConverter.INSTANCE.convertToUserTO(user, userId), HttpStatus.OK);
         }
         return new ResponseEntity<>("Unauthenticated", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/all")
-    public List<UserTO> getAllUsers() {
-        return IUserConverter.INSTANCE.convertToUserTO(userService.getAllUsers());
+    public List<UserTO> getAllUsers(@PathVariable("userId") Long userId) {
+        return IUserConverter.INSTANCE.convertToUserTO(userService.getAllUsers(), userId);
     }
 
     @PostMapping("/follow")
@@ -94,4 +94,9 @@ public class UserController {
         return new ResponseEntity<>(IFollowingConverter.INSTANCE.convertToFollowingTO(userService.findByUserName(username).getFollowing(), "following", loggedInUser.getFollowing()), HttpStatus.OK);
     }
 
+    @GetMapping("/find/{name}")
+    public ResponseEntity<List<UserTO>> getUsersByNameContaining(@PathVariable("userId") Long userId, @PathVariable("name") String name) {
+        User loggedInUser = userService.findById(userId);
+        return new ResponseEntity<>(IUserConverter.INSTANCE.convertToUserTO(userService.findByNameContaining(name), userId), HttpStatus.OK);
+    }
 }

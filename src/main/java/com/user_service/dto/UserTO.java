@@ -40,6 +40,8 @@ public class UserTO {
 
     private int noOfFollowers = 0;
 
+    private boolean isUserFollowedByLoggedInUser = false;
+
     private Date dateCreated;
 
     private Date lastUpdated;
