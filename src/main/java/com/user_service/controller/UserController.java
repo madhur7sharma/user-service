@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -95,8 +96,20 @@ public class UserController {
     }
 
     @GetMapping("/find/{name}")
-    public ResponseEntity<List<UserTO>> getUsersByNameContaining(@PathVariable("userId") Long userId, @PathVariable("name") String name) {
+    public ResponseEntity<List<FollowingTO>> getUsersByNameContaining(@PathVariable("userId") Long userId, @PathVariable("name") String name) {
         User loggedInUser = userService.findById(userId);
-        return new ResponseEntity<>(IUserConverter.INSTANCE.convertToUserTO(userService.findByNameContaining(name), userId), HttpStatus.OK);
+        List<UserTO> userTOS = IUserConverter.INSTANCE.convertToUserTO(userService.findByNameContaining(name), userId);
+        List<FollowingTO> followingTOS = userTOS.stream().map(user -> {
+            FollowingTO followingTO = new FollowingTO();
+            followingTO.setUserFollowedByLoggedInUser(user.isUserFollowedByLoggedInUser());
+            followingTO.setUser(IUserConverter.INSTANCE.convertToUser(user));
+            return followingTO;
+        }).collect(Collectors.toList());
+        return new ResponseEntity<>(followingTOS, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-user/{username}")
+    public ResponseEntity<UserTO> getUserByUserName(@PathVariable("userId") Long userId, @PathVariable("username") String username) {
+        return new ResponseEntity<>(IUserConverter.INSTANCE.convertToUserTO(userService.findByUserName(username), userId), HttpStatus.OK);
     }
 }

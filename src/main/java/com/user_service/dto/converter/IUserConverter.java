@@ -46,6 +46,8 @@ public interface IUserConverter {
         return user.getFollowers().stream().anyMatch(user1 -> user1.getFrom().getId().equals(loggedInUserId));
     }
 
+    User convertToUser(UserTO user);
+
     default List<UserTO> convertToUserTO(Collection<User> users, Long loggedInUserId) {
         return users.stream().map(user -> {
             UserTO userTO = this.convertToUserTO(user, loggedInUserId);
