@@ -28,7 +28,7 @@ public interface IUserConverter {
 
     @Named("noOfPosts")
     default int postNumbers(List<Post> posts) {
-        return posts.size();
+        return posts != null ? posts.size() : 0;
     }
 
     @Named("noOfFollowers")

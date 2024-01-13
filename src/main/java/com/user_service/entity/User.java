@@ -36,10 +36,10 @@ public class User {
     @Column(name = "lastname", nullable = false)
     private String lastName;
 
-    @Column(name = "age", nullable = false)
+    @Column(name = "age")
     private int age;
 
-    @Column(name = "dob", nullable = false)
+    @Column(name = "dob")
     private Date dateOfBirth;
 
     @Column(name = "roles", nullable = false)

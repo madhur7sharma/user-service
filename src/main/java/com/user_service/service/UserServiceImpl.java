@@ -71,7 +71,18 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User registerUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles("NORMAL");
         userRespository.save(user);
         return user;
+    }
+
+    @Override
+    public User editUser(Long userId, User user) {
+        User exitingUserDetails = userRespository.findById(userId).get();
+        user.setPassword(exitingUserDetails.getPassword());
+        user.setEmail(exitingUserDetails.getEmail());
+        user.setUserName(exitingUserDetails.getUserName());
+        user.setRoles("NORMAL");
+        return userRespository.save(user);
     }
 }

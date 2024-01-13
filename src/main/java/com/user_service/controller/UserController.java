@@ -43,6 +43,15 @@ public class UserController {
         return new ResponseEntity<>(user1, HttpStatus.OK);
     }
 
+    @PutMapping("/edit")
+    public ResponseEntity<?> editUser(@PathVariable("userId") Long userId, @RequestBody User newUserDetails) {
+        if(userId != newUserDetails.getId()) {
+            return new ResponseEntity<>(new Response("Bad request"), HttpStatus.BAD_REQUEST);
+        }
+        User user1 = userService.editUser(userId, newUserDetails);
+        return new ResponseEntity<>(IUserConverter.INSTANCE.convertToUserTO(user1, userId), HttpStatus.OK);
+    }
+
     @PostMapping("/token")
     public ResponseEntity<TokenResponse> getToken(@PathVariable("userId") Long userId, @RequestBody User user) {
         TokenResponse response = new TokenResponse();

@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IUserService {
     User registerUser(User user);
+    User editUser(Long userId, User user);
     String generateToken(User user);
 //    boolean validateToken(String token);
     List<User> getAllUsers();
