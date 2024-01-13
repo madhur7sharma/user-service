@@ -1,6 +1,8 @@
 package com.user_service.dto.converter;
 
+import com.user_service.dto.FollowStates;
 import com.user_service.dto.FollowingTO;
+import com.user_service.dto.IsUserFollowing;
 import com.user_service.entity.Following;
 import com.user_service.entity.User;
 import org.mapstruct.Context;
@@ -19,7 +21,7 @@ public interface IFollowingConverter {
     IFollowingConverter INSTANCE = Mappers.getMapper(IFollowingConverter.class);
 
     @Mapping(source = "following", target = "user", qualifiedByName = "firstName")
-    @Mapping(source = "following", target = "userFollowedByLoggedInUser", qualifiedByName = "isUserFollowedByLoggedInUser")
+    @Mapping(source = "following", target = "isUserFollowedByLoggedInUser", qualifiedByName = "isUserFollowedByLoggedInUser")
     FollowingTO convertToFollowingTO(Following following, @Context String type, @Context Set<Following> loggedInUserFollowing);
 
     @Named("firstName")
@@ -32,11 +34,23 @@ public interface IFollowingConverter {
     }
 
     @Named("isUserFollowedByLoggedInUser")
-    default boolean isUserFollowedByLoggedInUser(Following following, @Context String type, @Context Set<Following> loggedInUserFollowing) {
+    default IsUserFollowing isUserFollowedByLoggedInUser(Following loggedInUserFollower, @Context String type, @Context Set<Following> loggedInUserFollowing) {
+        Following following1;
         if(type.equals("followers")) {
-            return loggedInUserFollowing.stream().anyMatch(follow -> follow.getTo().getId().equals(following.getFrom().getId()));
+//            return loggedInUserFollowing.stream().anyMatch(follow -> follow.getTo().getId().equals(loggedInUserFollower.getFrom().getId()));
+            following1 = loggedInUserFollowing.stream().filter(user1 -> user1.getTo().getId().equals(loggedInUserFollower.getFrom().getId())).findAny().orElse(null);
         } else {
-            return loggedInUserFollowing.stream().anyMatch(follow -> follow.getTo().getId().equals(following.getTo().getId()));
+//            return loggedInUserFollowing.stream().anyMatch(follow -> follow.getTo().getId().equals(loggedInUserFollower.getTo().getId()));
+            following1 = loggedInUserFollowing.stream().filter(user1 -> user1.getTo().getId().equals(loggedInUserFollower.getTo().getId())).findAny().orElse(null);
+        }
+        if(following1 != null) {
+            if(following1.getFollowRequest().equals(FollowStates.PENDING)) {
+                return IsUserFollowing.REQUESTED;
+            } else {
+                return IsUserFollowing.FOLLOWING;
+            }
+        } else {
+            return IsUserFollowing.NOT_FOLLOWING;
         }
     }
 

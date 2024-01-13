@@ -110,7 +110,7 @@ public class UserController {
         List<UserTO> userTOS = IUserConverter.INSTANCE.convertToUserTO(userService.findByNameContaining(name), userId);
         List<FollowingTO> followingTOS = userTOS.stream().map(user -> {
             FollowingTO followingTO = new FollowingTO();
-            followingTO.setUserFollowedByLoggedInUser(user.isUserFollowedByLoggedInUser());
+            followingTO.setIsUserFollowedByLoggedInUser(user.getIsUserFollowedByLoggedInUser());
             followingTO.setUser(IUserConverter.INSTANCE.convertToUser(user));
             return followingTO;
         }).collect(Collectors.toList());

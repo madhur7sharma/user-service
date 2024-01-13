@@ -40,7 +40,7 @@ public class UserTO {
 
     private int noOfFollowers = 0;
 
-    private boolean isUserFollowedByLoggedInUser = false;
+    private IsUserFollowing isUserFollowedByLoggedInUser = IsUserFollowing.NOT_FOLLOWING;
 
     private Date dateCreated;
 

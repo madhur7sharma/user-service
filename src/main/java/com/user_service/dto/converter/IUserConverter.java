@@ -1,5 +1,7 @@
 package com.user_service.dto.converter;
 
+import com.user_service.dto.FollowStates;
+import com.user_service.dto.IsUserFollowing;
 import com.user_service.dto.UserTO;
 import com.user_service.entity.Following;
 import com.user_service.entity.Post;
@@ -23,7 +25,7 @@ public interface IUserConverter {
     @Mapping(source = "posts", target = "noOfPosts", qualifiedByName = "noOfPosts")
     @Mapping(source = "followers", target = "noOfFollowers", qualifiedByName = "noOfFollowers")
     @Mapping(source = "following", target = "noOfFollowing", qualifiedByName = "noOfFollowing")
-    @Mapping(source = "user", target = "userFollowedByLoggedInUser", qualifiedByName = "isUserFollowedByLoggedInUser")
+    @Mapping(source = "user", target = "isUserFollowedByLoggedInUser", qualifiedByName = "isUserFollowedByLoggedInUser")
     UserTO convertToUserTO(User user, @Context Long loggedInUserId);
 
     @Named("noOfPosts")
@@ -42,8 +44,17 @@ public interface IUserConverter {
     }
 
     @Named("isUserFollowedByLoggedInUser")
-    default boolean isUserFollowedByLoggedInUser(User user, @Context Long loggedInUserId) {
-        return user.getFollowers().stream().anyMatch(user1 -> user1.getFrom().getId().equals(loggedInUserId));
+    default IsUserFollowing isUserFollowedByLoggedInUser(User user, @Context Long loggedInUserId) {
+        Following following = user.getFollowers().stream().filter(user1 -> user1.getFrom().getId().equals(loggedInUserId)).findAny().orElse(null);
+        if(following != null) {
+            if(following.getFollowRequest().equals(FollowStates.PENDING)) {
+                return IsUserFollowing.REQUESTED;
+            } else {
+                return IsUserFollowing.FOLLOWING;
+            }
+        } else {
+            return IsUserFollowing.NOT_FOLLOWING;
+        }
     }
 
     User convertToUser(UserTO user);

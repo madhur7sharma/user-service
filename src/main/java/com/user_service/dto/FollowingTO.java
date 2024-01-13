@@ -18,7 +18,7 @@ public class FollowingTO {
     @JsonIgnoreProperties({"posts","likedPosts", "comments", "followers", "following"})
     private User user;
 
-    private boolean isUserFollowedByLoggedInUser = false;
+    private IsUserFollowing isUserFollowedByLoggedInUser = IsUserFollowing.NOT_FOLLOWING;
 
     private Date dateCreated;
 
