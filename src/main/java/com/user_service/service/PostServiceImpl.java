@@ -8,6 +8,7 @@ import com.user_service.respository.user.IUserRespository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,8 +56,28 @@ public class PostServiceImpl implements IPostService {
     }
 
     @Override
-    public List<Post> findPostByUserName(String userName) {
-        return postRepository.findPostByUserUserName(userName);
+    public List<Post> findPostByUserName(String userName, Long loggedInUserId) {
+        boolean operationAllowed = false;
+        User loggedInUser = userRespository.findById(loggedInUserId).get();
+        User postsRequestedUser = userRespository.findByUserName(userName);
+        if(postsRequestedUser.isPrivate() && isLoogedInUserFollowing(postsRequestedUser, loggedInUser)) {
+            operationAllowed = true;
+        } else if(!postsRequestedUser.isPrivate()) {
+            operationAllowed = true;
+        }
+        if(operationAllowed) {
+            return postRepository.findPostByUserUserName(userName);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    private boolean isLoogedInUserFollowing(User postsRequestedUser, User loggedInUser) {
+        if(postsRequestedUser.getFollowers() != null) {
+            return postsRequestedUser.getFollowers().stream().anyMatch(user1 -> user1.getFrom().getId().equals(loggedInUser.getId()));
+        } else {
+            return false;
+        }
     }
 
     @Override

@@ -14,7 +14,7 @@ public interface IPostService {
 
     List<Post> findPostByUserId(Long userId);
 
-    List<Post> findPostByUserName(String userName);
+    List<Post> findPostByUserName(String userName, Long loggedInUserId);
 
     List<Post> getTimelinePosts(Long userId);
 }
