@@ -6,4 +6,5 @@ import lombok.Data;
 public class FollowRequest {
     private Long followingId;
     private FollowAction action;
+    private FollowStates request;
 }

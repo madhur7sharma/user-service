@@ -21,4 +21,16 @@ public interface IFollowingRepository extends JpaRepository<Following, Long> {
     void unFollowUser(@Param("userId") Long userId, @Param("followingId") Long followingId);
 
     List<Following> findFollowingByFromUserName(@Param("userName") String userName);
+
+    @Query("SELECT follow FROM Following follow WHERE from.id =:fromId AND to.id =:toId")
+    Following findFollowingByFromAndTo(@Param("fromId") Long fromId, @Param("toId") Long toId);
+
+    @Query("SELECT follow FROM Following follow WHERE to.id =:userId AND followRequest = 1")
+    List<Following> getFollowRequests(@Param("userId") Long userId);
+
+    @Query("SELECT follow FROM Following follow WHERE to.userName =:userName AND followRequest = 2")
+    List<Following> findFollowers(@Param("userName") String userName);
+
+    @Query("SELECT follow FROM Following follow WHERE from.userName =:userName AND followRequest = 2")
+    List<Following> findFollowing(@Param("userName") String userName);
 }

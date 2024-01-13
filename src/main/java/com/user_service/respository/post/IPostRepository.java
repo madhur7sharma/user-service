@@ -16,6 +16,6 @@ public interface IPostRepository extends JpaRepository<Post, Long> {
 
     List<Post> findPostByUserUserName(@Param("userName") String userName);
 
-    @Query("SELECT posts FROM Post posts WHERE posts.user.id IN (SELECT following.to.id FROM Following following WHERE following.from.id =:userId)")
+    @Query("SELECT posts FROM Post posts WHERE posts.user.id IN (SELECT following.to.id FROM Following following WHERE following.from.id =:userId AND following.followRequest = 2)")
     List<Post> findTimelinePosts(@Param("userId") Long userId);
 }

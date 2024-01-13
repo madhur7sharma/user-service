@@ -1,8 +1,11 @@
 package com.user_service.service;
 
+import com.user_service.dto.FollowStates;
 import com.user_service.dto.LikeStates;
+import com.user_service.entity.Following;
 import com.user_service.entity.Post;
 import com.user_service.entity.User;
+import com.user_service.respository.following.IFollowingRepository;
 import com.user_service.respository.post.IPostRepository;
 import com.user_service.respository.user.IUserRespository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,9 @@ public class PostServiceImpl implements IPostService {
 
     @Autowired
     private IUserRespository userRespository;
+
+    @Autowired
+    private IFollowingRepository followingRepository;
 
     @Override
     public Post createPost(Post post) {
@@ -60,7 +66,8 @@ public class PostServiceImpl implements IPostService {
         boolean operationAllowed = false;
         User loggedInUser = userRespository.findById(loggedInUserId).get();
         User postsRequestedUser = userRespository.findByUserName(userName);
-        if(postsRequestedUser.isPrivate() && isLoogedInUserFollowing(postsRequestedUser, loggedInUser)) {
+        Following following = followingRepository.findFollowingByFromAndTo(loggedInUser.getId(), postsRequestedUser.getId());
+        if(postsRequestedUser.isPrivate() && isLoogedInUserFollowing(postsRequestedUser, loggedInUser) && following.getFollowRequest().equals(FollowStates.ACCEPTED)) {
             operationAllowed = true;
         } else if(!postsRequestedUser.isPrivate()) {
             operationAllowed = true;

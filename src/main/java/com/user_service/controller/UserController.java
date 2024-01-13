@@ -7,6 +7,7 @@ import com.user_service.dto.UserTO;
 import com.user_service.dto.Response;
 import com.user_service.dto.converter.IFollowingConverter;
 import com.user_service.dto.converter.IUserConverter;
+import com.user_service.entity.Following;
 import com.user_service.entity.User;
 import com.user_service.service.IFollowingService;
 import com.user_service.service.IUserService;
@@ -87,21 +88,34 @@ public class UserController {
     }
 
     @PostMapping("/follow")
-    public ResponseEntity<Response> follow(@PathVariable("userId") Long userId, @RequestBody FollowRequest followRequest) {
-        followingService.updateFollowAction(userId, followRequest);
+    public ResponseEntity<FollowingTO> follow(@PathVariable("userId") Long userId, @RequestBody FollowRequest followRequest) {
+        Following following = followingService.updateFollowAction(userId, followRequest);
+        User loggedInUser = userService.findById(userId);
+        return new ResponseEntity<>(IFollowingConverter.INSTANCE.convertToFollowingTO(following, "following", loggedInUser.getFollowing()), HttpStatus.OK);
+    }
+
+    @GetMapping("/follow-requests")
+    public ResponseEntity<Set<FollowingTO>> getFollowRequests(@PathVariable("userId") Long userId) {
+        User loggedInUser = userService.findById(userId);
+        return new ResponseEntity<>(IFollowingConverter.INSTANCE.convertToFollowingTO(followingService.getFollowRequests(userId), "followers", loggedInUser.getFollowing()), HttpStatus.OK);
+    }
+
+    @PutMapping("/follow-requests")
+    public ResponseEntity<Response> followRequestsAction(@PathVariable("userId") Long userId, @RequestBody FollowRequest followRequest) {
+        followingService.updateRequestAction(userId, followRequest);
         return new ResponseEntity<>(new Response("Success"), HttpStatus.OK);
     }
 
     @GetMapping("/followers/{username}")
     public ResponseEntity<Set<FollowingTO>> getFollowersByUserName(@PathVariable("userId") Long userId, @PathVariable("username") String username) {
         User loggedInUser = userService.findById(userId);
-        return new ResponseEntity<>(IFollowingConverter.INSTANCE.convertToFollowingTO(userService.findByUserName(username).getFollowers(), "followers", loggedInUser.getFollowing()), HttpStatus.OK);
+        return new ResponseEntity<>(IFollowingConverter.INSTANCE.convertToFollowingTO(followingService.findFollowers(username), "followers", loggedInUser.getFollowing()), HttpStatus.OK);
     }
 
     @GetMapping("/following/{username}")
     public ResponseEntity<Set<FollowingTO>> getFollowingByUserName(@PathVariable("userId") Long userId, @PathVariable("username") String username) {
         User loggedInUser = userService.findById(userId);
-        return new ResponseEntity<>(IFollowingConverter.INSTANCE.convertToFollowingTO(userService.findByUserName(username).getFollowing(), "following", loggedInUser.getFollowing()), HttpStatus.OK);
+        return new ResponseEntity<>(IFollowingConverter.INSTANCE.convertToFollowingTO(followingService.findFollowing(username), "following", loggedInUser.getFollowing()), HttpStatus.OK);
     }
 
     @GetMapping("/find/{name}")
