@@ -46,7 +46,7 @@ public class AuthConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/user/{userId}/token", "/user/{userId}/register")
+                                .requestMatchers("/user/{userId}/token", "/user/{userId}/register", "/user/{userId}/check-email/{email}", "/user/{userId}/check-username/{username}")
                                 .permitAll()
                                 .requestMatchers("/user/{userId}/hey", "/user/{userId}/all")
                                 .hasAuthority("ADMIN")

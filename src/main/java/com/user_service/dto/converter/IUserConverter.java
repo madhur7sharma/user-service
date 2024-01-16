@@ -35,12 +35,14 @@ public interface IUserConverter {
 
     @Named("noOfFollowers")
     default int noOfFollowers(Set<Following> followers) {
-        return followers.size();
+        List<Following> followerNumber = followers.stream().filter(follower -> follower.getFollowRequest().equals(FollowStates.ACCEPTED)).collect(Collectors.toList());
+        return followerNumber.size();
     }
 
     @Named("noOfFollowing")
     default int noOfFollowing(Set<Following> followings) {
-        return followings.size();
+        List<Following> followingNumber = followings.stream().filter(follower -> follower.getFollowRequest().equals(FollowStates.ACCEPTED)).collect(Collectors.toList());
+        return followingNumber.size();
     }
 
     @Named("isUserFollowedByLoggedInUser")

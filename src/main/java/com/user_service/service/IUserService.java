@@ -20,4 +20,8 @@ public interface IUserService {
     User findByUserName(String userName);
 
     List<User> findByNameContaining(String name);
+
+    boolean checkIfEmailAlreadyRegistered(String email);
+
+    boolean checkIfUsernameAlreadyRegistered(String userName);
 }

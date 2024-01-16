@@ -67,7 +67,9 @@ public class PostServiceImpl implements IPostService {
         User loggedInUser = userRespository.findById(loggedInUserId).get();
         User postsRequestedUser = userRespository.findByUserName(userName);
         Following following = followingRepository.findFollowingByFromAndTo(loggedInUser.getId(), postsRequestedUser.getId());
-        if(postsRequestedUser.isPrivate() && isLoogedInUserFollowing(postsRequestedUser, loggedInUser) && following.getFollowRequest().equals(FollowStates.ACCEPTED)) {
+        if(postsRequestedUser.getId() == loggedInUser.getId()) {
+            operationAllowed = true;
+        } else if(postsRequestedUser.isPrivate() && isLoogedInUserFollowing(postsRequestedUser, loggedInUser) && following.getFollowRequest().equals(FollowStates.ACCEPTED)) {
             operationAllowed = true;
         } else if(!postsRequestedUser.isPrivate()) {
             operationAllowed = true;

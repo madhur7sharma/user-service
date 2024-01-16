@@ -39,9 +39,27 @@ public class UserController {
     private JwtService jwt;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User user1 = userService.registerUser(user);
-        return new ResponseEntity<>(user1, HttpStatus.OK);
+    public ResponseEntity<TokenResponse> registerUser(@RequestBody User user) {
+        User validatedUser = userService.registerUser(user);
+        TokenResponse response = new TokenResponse();
+        if(validatedUser != null) {
+            response.setToken(userService.generateToken(validatedUser));
+            response.setUser(IUserConverter.INSTANCE.convertToUserTO(validatedUser, validatedUser.getId()));
+            response.setMessage("User registered");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        response.setMessage("Invalid credentials");
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/check-email/{email}")
+    public boolean checkIfEmailAlreadyRegistered(@PathVariable("userId") Long userId, @PathVariable("email") String email) {
+        return userService.checkIfEmailAlreadyRegistered(email);
+    }
+
+    @GetMapping("/check-username/{username}")
+    public boolean checkIfUsernameAlreadyRegistered(@PathVariable("userId") Long userId, @PathVariable("username") String username) {
+        return userService.checkIfUsernameAlreadyRegistered(username);
     }
 
     @PutMapping("/edit")

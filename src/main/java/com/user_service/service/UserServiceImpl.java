@@ -63,6 +63,24 @@ public class UserServiceImpl implements IUserService {
         return userRespository.findByFirstNameContainingAllIgnoreCase(name);
     }
 
+    @Override
+    public boolean checkIfEmailAlreadyRegistered(String email) {
+        if(userRespository.findByEmail(email) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public boolean checkIfUsernameAlreadyRegistered(String userName) {
+        if(userRespository.findByUserName(userName) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 //    @Override
 //    public boolean validateToken(String token) {
 //        jwt.validateToken(token);
