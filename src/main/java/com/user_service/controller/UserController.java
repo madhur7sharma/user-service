@@ -82,7 +82,7 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         }
         response.setMessage("Invalid credentials");
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
     }
 
 
