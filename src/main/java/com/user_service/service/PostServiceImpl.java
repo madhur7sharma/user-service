@@ -5,6 +5,7 @@ import com.user_service.dto.LikeStates;
 import com.user_service.entity.Following;
 import com.user_service.entity.Post;
 import com.user_service.entity.User;
+import com.user_service.respository.comment.ICommentRepository;
 import com.user_service.respository.following.IFollowingRepository;
 import com.user_service.respository.post.IPostRepository;
 import com.user_service.respository.user.IUserRespository;
@@ -27,10 +28,28 @@ public class PostServiceImpl implements IPostService {
     @Autowired
     private IFollowingRepository followingRepository;
 
+    @Autowired
+    private ICommentRepository commentRepository;
+
     @Override
     public Post createPost(Post post) {
         postRepository.save(post);
         return post;
+    }
+
+    @Override
+    public Post editPost(Post post) {
+        Post existingPost = postRepository.findById(post.getId()).get();
+        existingPost.setCaption(post.getCaption());
+        existingPost.setLocation(post.getLocation());
+        postRepository.save(existingPost);
+        return existingPost;
+    }
+
+    @Override
+    public void deletePost(Long postId) {
+        commentRepository.deleteByPostId(postId);
+        postRepository.deletePostById(postId);
     }
 
     @Override
@@ -75,7 +94,8 @@ public class PostServiceImpl implements IPostService {
             operationAllowed = true;
         }
         if(operationAllowed) {
-            return postRepository.findPostByUserUserName(userName);
+            List<Post> postByUserUserName = postRepository.findPostByUserUserName(userName);
+            return postByUserUserName;
         } else {
             return Collections.emptyList();
         }

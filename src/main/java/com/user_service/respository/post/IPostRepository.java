@@ -1,7 +1,9 @@
 package com.user_service.respository.post;
 
 import com.user_service.entity.Post;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -18,4 +20,9 @@ public interface IPostRepository extends JpaRepository<Post, Long> {
 
     @Query("SELECT posts FROM Post posts WHERE posts.user.id IN (SELECT following.to.id FROM Following following WHERE following.from.id =:userId AND following.followRequest = 2)")
     List<Post> findTimelinePosts(@Param("userId") Long userId);
+
+    @Modifying
+    @Query("DELETE FROM Post WHERE id=:postId")
+    @Transactional
+    void deletePostById(@Param("postId") Long postId);
 }

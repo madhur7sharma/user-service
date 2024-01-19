@@ -2,6 +2,7 @@ package com.user_service.controller;
 
 import com.user_service.dto.LikeRequest;
 import com.user_service.dto.PostTO;
+import com.user_service.dto.Response;
 import com.user_service.dto.converter.PostConverter;
 import com.user_service.entity.Post;
 import com.user_service.entity.User;
@@ -29,6 +30,22 @@ public class PostController {
         post.setUser(user);
         Post createdPost = postService.createPost(post);
         return new ResponseEntity<>(PostConverter.INSTANCE.convertToPostTO(createdPost, userId), HttpStatus.OK);
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<PostTO> editPost(@PathVariable(value = "userId") Long userId, @RequestBody Post post) {
+        User user = new User();
+        user.setId(userId);
+        post.setUser(user);
+        Post createdPost = postService.editPost(post);
+        return new ResponseEntity<>(PostConverter.INSTANCE.convertToPostTO(createdPost, userId), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Response> deletePost(@PathVariable(value = "userId") Long userId, @PathVariable(value = "postId") Long postId) {
+        postService.deletePost(postId);
+        Response response = new Response("Pose delete successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{postId}")

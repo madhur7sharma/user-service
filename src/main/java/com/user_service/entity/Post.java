@@ -20,18 +20,24 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "url", nullable = false)
+    @Column(name = "url", nullable = false, updatable = false)
     private String postUrl;
+
+    @Column(name = "caption")
+    private String caption;
+
+    @Column(name = "location")
+    private String location;
 
     @ManyToOne
     @JoinColumn(name = "user_posts", nullable = false)
     private User user;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "likes", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<User> likes = new HashSet<>();
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "user_comments")
     private Set<Comment> comments;
 

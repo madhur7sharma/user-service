@@ -96,11 +96,11 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public User editUser(Long userId, User user) {
-        User exitingUserDetails = userRespository.findById(userId).get();
-        user.setPassword(exitingUserDetails.getPassword());
-        user.setEmail(exitingUserDetails.getEmail());
-        user.setUserName(exitingUserDetails.getUserName());
-        user.setRoles("NORMAL");
-        return userRespository.save(user);
+        User existingUser = userRespository.findById(userId).get();
+        existingUser.setFirstName(user.getFirstName());
+        existingUser.setLastName(user.getLastName());
+        existingUser.setAge(user.getAge());
+        existingUser.setDateOfBirth(user.getDateOfBirth());
+        return userRespository.save(existingUser);
     }
 }

@@ -7,6 +7,7 @@ import com.user_service.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +18,10 @@ public class PostTO {
     private Long id;
 
     private String postUrl;
+
+    private String caption;
+
+    private String location;
 
     @JsonIgnoreProperties({"posts","likedPosts", "comments", "followers", "following"})
     private User user;
@@ -34,5 +39,9 @@ public class PostTO {
     private int noOfComments = 0;
 
     private boolean isLikedByUser = false;
+
+    private Date dateCreated;
+
+    private Date lastUpdated;
 
 }

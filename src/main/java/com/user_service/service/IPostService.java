@@ -8,6 +8,10 @@ import java.util.List;
 public interface IPostService {
     Post createPost(Post post);
 
+    Post editPost(Post post);
+
+    void deletePost(Long postId);
+
     Post getPostById(Long postId);
 
     void likePost(Long postId, Long userId, LikeStates action);
