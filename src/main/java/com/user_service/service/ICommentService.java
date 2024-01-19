@@ -8,4 +8,6 @@ public interface ICommentService {
     Comment addComment(Comment comment);
 
     List<Comment> findCommentsByPostId(Long postId);
+
+    List<Comment> findNestedCommentByCommentId(Long commentId);
 }

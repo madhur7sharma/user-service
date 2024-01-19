@@ -21,6 +21,9 @@ public class Comment {
     @Column(name = "user_comment", nullable = false)
     private String comment;
 
+    @Column(name = "nested_comment_id")
+    private Long nestedCommentId;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

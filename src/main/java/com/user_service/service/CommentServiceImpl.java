@@ -23,4 +23,9 @@ public class CommentServiceImpl implements ICommentService {
     public List<Comment> findCommentsByPostId(Long postId) {
         return commentRepository.findCommentByPostId(postId);
     }
+
+    @Override
+    public List<Comment> findNestedCommentByCommentId(Long commentId) {
+        return commentRepository.findNestedCommentByCommentId(commentId);
+    }
 }

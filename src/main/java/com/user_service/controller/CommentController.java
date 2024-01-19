@@ -37,10 +37,16 @@ public class CommentController {
         return new ResponseEntity<>(addComment, HttpStatus.OK);
     }
 
-    @GetMapping("/allcomments")
+    @GetMapping("/post-comments")
     public ResponseEntity<List<CommentTO>> getComments(@PathVariable(value = "postId") Long postId) {
         List<CommentTO> commentsByPostId = ICommentConverter.INSTANCE.convertToCommentTO(commentService.findCommentsByPostId(postId));
         return new ResponseEntity<>(commentsByPostId, HttpStatus.OK);
+    }
+
+    @GetMapping("/nested-comments/{commentId}")
+    public ResponseEntity<List<CommentTO>> getNestedComments(@PathVariable(value = "commentId") Long commentId) {
+        List<CommentTO> nestedComments = ICommentConverter.INSTANCE.convertToCommentTO(commentService.findNestedCommentByCommentId(commentId));
+        return new ResponseEntity<>(nestedComments, HttpStatus.OK);
     }
 
 }
