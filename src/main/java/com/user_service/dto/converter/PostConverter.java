@@ -34,7 +34,8 @@ public interface PostConverter {
     @Named("noOfComments")
     public static int noOfComments(Set<Comment> comments) {
         if(comments != null) {
-            return comments.size();
+            List<Comment> collect = comments.stream().filter(comment -> comment.getNestedCommentId() == null).collect(Collectors.toList());
+            return collect.size();
         }
         return 0;
     }

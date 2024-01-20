@@ -1,7 +1,7 @@
 package com.user_service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIncludeProperties;
 import com.user_service.entity.Post;
 import com.user_service.entity.User;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class CommentTO {
     @JsonIgnoreProperties({"posts", "likedPosts", "comments", "followers", "following"})
     private User user;
 
-    @JsonIgnore
+    @JsonIncludeProperties({"id"})
     private Post post;
 
     private Date dateCreated;
